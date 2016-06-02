@@ -1,0 +1,21 @@
+{
+  "name": "getting-mean",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Jonatas Leon <jonatas.leon@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/jonatasleon/getting-mean",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

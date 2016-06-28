@@ -17,12 +17,12 @@ module.exports.locationsCreate = function(req, res) {
 module.exports.locationsReadOne = function(req, res) {
     if (req.params && req.params.locationid) {
         Loc.findById(req.params.locationid).exec(function(err, location) {
-            if (!location){
+            if (!location) {
                 utils.sendJsonResponse(res, 404, {
                     "message": "locationid not found"
                 });
                 return;
-            }else if (err){
+            } else if (err) {
                 utils.sendJsonResponse(res, 404, err);
                 return;
             }

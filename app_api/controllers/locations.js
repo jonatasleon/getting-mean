@@ -3,8 +3,12 @@ var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
 
 module.exports.locationsListByDistance = function(req, res) {
-    utils.sendJsonResponse(res, 200, {
-        "status": "success"
+    Loc.find().exec(function(err, locations) {
+        if (err) {
+            utils.sendJsonResponse(res, 404, err);
+        } else {
+            utils.sendJsonResponse(res, 200, locations);
+        }
     });
 };
 

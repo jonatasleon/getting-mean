@@ -1,4 +1,5 @@
 var utils = require('./utils');
+var theEarth = require('./theEarth');
 var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
 

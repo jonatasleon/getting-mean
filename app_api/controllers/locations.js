@@ -134,7 +134,19 @@ module.exports.locationsUpdateOne = function(req, res) {
 };
 
 module.exports.locationsDeleteOne = function(req, res) {
-    utils.sendJsonResponse(res, 200, {
-        "status": "sucess"
-    });
+    var locationid = req.params.locationid;
+    if (locationid) {
+        Loc.findByIdAndRemove(locationid)
+            .exec(function (err, location) {
+                if (err) {
+                    utils.sendJsonResponse(res, 404, err);
+                    return;
+                }
+                utils.sendJsonResponse(res, 204, null);
+            });
+    } else {
+        utils.sendJsonResponse(res, 404, {
+            "message": "No locationid"
+        });
+    }
 };

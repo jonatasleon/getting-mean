@@ -1,5 +1,6 @@
 var request = require('request');
 var apiOptions  = require('./utils').apiOptions;
+var _formatDistance = require('./utils')._formatDistance;
 
 var renderHomepage = function(req, res, responseBody) {
     res.render('locations-list', {
@@ -28,6 +29,11 @@ module.exports.homelist = function(req, res) {
         }
     };
     request (requestOptions, function(err, response, body) {
+        var i, data;
+        data = body;
+        for (i = 0; i < data.length; i++) {
+            data[i].distance = _formatDistance(data[i].distance);
+        }
         renderHomepage(req, res, body);
     });
 };

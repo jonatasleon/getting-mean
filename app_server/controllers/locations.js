@@ -1,6 +1,7 @@
 var request = require('request');
 var apiOptions = require('./utils').apiOptions;
 var _formatDistance = require('./utils')._formatDistance;
+var _showError = require('./utils')._showError;
 
 var renderHomepage = function(req, res, responseBody) {
     var message;
@@ -78,12 +79,16 @@ module.exports.locationInfo = function(req, res) {
 
     request(requestOptions, function(err, response, body) {
         var data = body;
-        data.coords = {
-            lng: body.coord[0],
-            lat: body.coord[1]
-        };
+        if (response.statusCode === 200) {
+            data.coords = {
+                lng: body.coord[0],
+                lat: body.coord[1]
+            };
 
-        renderDetailPage(req, res, data);
+            renderDetailPage(req, res, data);
+        } else {
+            _showError(req, res, response.statusCode);
+        }
     });
 };
 

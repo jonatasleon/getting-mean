@@ -18,5 +18,22 @@ function _formatDistance(distance) {
     return numDistance + unit;
 }
 
+function _showError(req, res, status) {
+    var title, content;
+    if (status === 404) {
+        title = "404, page not found";
+        content = "Oh dear. Looks like we can't find this page. Sorry.";
+    } else {
+        title = status + ", something's gone wrong";
+        content = "Something, somewhere, has gone just a little bit wrong.";
+    }
+    res.status(status);
+    res.render('generic-text', {
+        title: title,
+        content: content
+    });
+}
+
 module.exports.apiOptions = apiOptions;
 module.exports._formatDistance = _formatDistance;
+module.exports._showError = _showError;

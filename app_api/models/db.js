@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var debug = require('debug')('getting-mean:db');
 
 var dbURI = (process.env.NODE_ENV === 'production') ?
     process.env.MONGOLAB_URI :
@@ -7,20 +8,20 @@ var dbURI = (process.env.NODE_ENV === 'production') ?
 mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', function() {
-    console.log('Mongoose connected to ' + dbURI);
+    debug('Mongoose connected to ' + dbURI);
 });
 
 mongoose.connection.on('error', function(err) {
-    console.log('Mongoose connection error:' + err);
+    debug('Mongoose connection error:' + err);
 });
 
 mongoose.connection.on('disconnected', function() {
-    console.log('Mongoose disconnected');
+    debug('Mongoose disconnected');
 });
 
 var gracefulShutdown = function(msg, callback) {
     mongoose.connection.close(function() {
-        console.log('Mongoose disconnected through ' + msg);
+        debug('Mongoose disconnected through ' + msg);
         callback();
     })
 };

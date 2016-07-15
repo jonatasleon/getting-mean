@@ -41,6 +41,39 @@ var renderDetailPage = function(req, res, locDetail) {
     });
 }
 
+var renderReviewForm = function(req, res, locationInfo) {
+    res.render('location-review-form', {
+        title: 'Review ' + locationInfo.name + ' on Loc8r',
+        pageHeader: {
+            title: 'Review ' + locationInfo.name
+        }
+    });
+}
+
+var getLocationInfo = function(req, res, callback) {
+    var requestOptions, path;
+    path = "/api/locations/" + req.params.locationid;
+    requestOptions = {
+        url: apiOptions.server + path,
+        method: "GET",
+        json: {}
+    };
+
+    request(requestOptions, function(err, response, body) {
+        var data = body;
+        if (response.statusCode === 200) {
+            data.coords = {
+                lng: body.coords[0],
+                lat: body.coords[1]
+            };
+
+            callback(req, res, data);
+        } else {
+            _showError(req, res, response.statusCode);
+        }
+    });
+}
+
 /* GET 'home' page */
 module.exports.homelist = function(req, res) {
     var requestOptions, path;
@@ -50,8 +83,10 @@ module.exports.homelist = function(req, res) {
         method: "GET",
         json: {},
         qs: {
-            lng: -0.7992599,
-            lat: 51.378091,
+            lng: 1,
+            lat: 1  ,
+            // lng: -0.7992599,
+            // lat: 51.378091,
             maxDistance: 20
         }
     };
@@ -69,35 +104,38 @@ module.exports.homelist = function(req, res) {
 
 /* GET 'Location info' page */
 module.exports.locationInfo = function(req, res) {
-    var requestOptions, path;
-    path = "/api/locations/" + req.params.locationid;
-    requestOptions = {
-        url: apiOptions.server + path,
-        method: "GET",
-        json: {}
-    };
-
-    request(requestOptions, function(err, response, body) {
-        var data = body;
-        if (response.statusCode === 200) {
-            data.coords = {
-                lng: body.coord[0],
-                lat: body.coord[1]
-            };
-
-            renderDetailPage(req, res, data);
-        } else {
-            _showError(req, res, response.statusCode);
-        }
+    getLocationInfo(req, res, function(req, res, data) {
+        renderDetailPage(res, res, data);
     });
 };
 
 /* GET 'Add review' page */
 module.exports.addReview = function(req, res) {
-    res.render('location-review-form', {
-        title: 'Review Starcups on Loc8r',
-        pageHeader: {
-            title: 'Review Starcups'
+    getLocationInfo(req, res, function(req, res, data) {
+        renderReviewForm(req, res, data);
+    });
+};
+
+/* POST 'new review' */
+module.exports.doAddReview = function(req, res) {
+    var requestOptions, path, locationid, postData;
+    locationid = req.params.locationid;
+    path = '/api/locations/' + locationid + '/reviews';
+    postData = {
+        author: req.body.name,
+        rating: parseInt(req.body.rating, 10),
+        reviewText: req.body.review
+    };
+    requestOptions = {
+        url: apiOptions.server + path,
+        method: "POST",
+        json: postData
+    };
+    request(requestOptions, function(err, response, body) {
+        if (response.statusCode === 201) {
+            res.redirect('/location/' + locationid);
+        } else {
+            _showError(req, res, response.statusCode);
         }
     });
 };

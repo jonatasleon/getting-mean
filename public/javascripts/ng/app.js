@@ -50,8 +50,22 @@ var loc8rData = ['$http', function($http) {
     return $http.get('/api/locations?lng=1&lat=1&maxDistance=20');
 }];
 
+var geolocation = function() {
+    var geoPosition = function(cbSuccess, cbError, cbNoGeo) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(cbSuccess, cbError);
+        } else {
+            cbNoGeo();
+        }
+    };
+    return {
+        getPosition: getPosition
+    };
+};
+
 angular.module('loc8rApp')
     .controller('locationListController', locationListController)
     .filter('formatDistance', formatDistance)
     .directive('ratingStars', ratingStars)
-    .service('loc8rData', loc8rData);
+    .service('loc8rData', loc8rData)
+    .service('geolocation', geolocation);

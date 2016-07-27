@@ -26,6 +26,5 @@ function _showError(req, res, status) {
     });
 }
 
-module.exports.apiOptions = apiOptions;
 module.exports._formatDistance = _formatDistance;
 module.exports._showError = _showError;

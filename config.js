@@ -13,7 +13,5 @@ var config = {
 
 
 module.exports = function (env) {
-	var obj = config[env || process.env.NODE_ENV] || config.dev;
-	console.log(obj);
-    return obj;
+    return config[env || process.env.NODE_ENV] || config.dev;
 };

@@ -1,18 +1,40 @@
 angular.module('loc8rApp', []);
 
-var locationListController = ['$scope', 'loc8rData', function($scope, loc8rData) {
-    $scope.message = 'Searching for nearby places';
-    loc8rData.then(function(data) {
-        var locations = data.data;
-        $scope.message = (locations.length > 0) ? '' : 'No locations found';
-        console.log(locations);
-        $scope.data = {
-            locations: locations
+var locationListController = ['$scope', 'loc8rData', 'geolocation',
+    function($scope, loc8rData, geolocation) {
+        $scope.message = 'Checking your location';
+
+        $scope.getData = function(position) {
+            var coords = position.coords;
+            $scope.message = 'Searching for nearby places';
+
+            loc8rData.locationByCoords(coords.latitude, coords.longitude).then(function(data) {
+                var locations = data.data;
+                $scope.message = (locations.length > 0) ? '' : 'No locations found';
+
+                $scope.data = {
+                    locations
+                };
+            }, function(err) {
+                $scope.message = 'Sorry, something\'s gone wrong';
+            });
         };
-    }, function(err) {
-        $scope.message = 'Sorry, something\'s gone wrong';
-    });
-}];
+
+        $scope.showError = function(error) {
+            $scope.$apply(function() {
+                $scope.message = error.message;
+            });
+        };
+
+        $scope.noGeo = function() {
+            $scope.$apply(function() {
+                $scope.message = 'Geolocation not supported by this browser.';
+            });
+        };
+
+        geolocation.getPosition($scope.getData, $scope.showError, $scope.noGeo);
+    }
+];
 
 var _isNumeric = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -21,7 +43,7 @@ var _isNumeric = function(n) {
 var formatDistance = function() {
     return function(distance) {
         var numDistance, unit;
-        console.log(distance);
+
         if ((distance || distance === 0) && _isNumeric(distance)) {
             if (distance > 1) {
                 numDistance = parseFloat(distance).toFixed(1);
@@ -47,11 +69,16 @@ var ratingStars = function() {
 };
 
 var loc8rData = ['$http', function($http) {
-    return $http.get('/api/locations?lng=1&lat=1&maxDistance=20');
+    var locationByCoords = function(lat, lng) {
+        return $http.get('/api/locations?lng=' + lng + '&lat=' + lat + '&maxDistance=20');
+    }
+    return {
+        locationByCoords
+    };
 }];
 
 var geolocation = function() {
-    var geoPosition = function(cbSuccess, cbError, cbNoGeo) {
+    var getPosition = function(cbSuccess, cbError, cbNoGeo) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(cbSuccess, cbError);
         } else {

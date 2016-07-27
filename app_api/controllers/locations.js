@@ -48,7 +48,7 @@ module.exports.locationsCreate = function(req, res) {
         name: req.body.name,
         address: req.body.address,
         facilities: (req.body.facilities || "").split(","),
-        coords: [parseFloat(req.body.lat), parseFloat(req.body.lng)],
+        coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
         openingTimes: [{
             days: req.body.days1,
             opening: req.body.opening1,

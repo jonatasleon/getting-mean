@@ -10,9 +10,10 @@ block content
           small &nbsp;#{pageHeader.strapline}
     .row
       .col-xs-12.col-sm-8(ng-controller="locationListController")
-        label(for="filter") Filter results
-        input#filter(type="text", name="filter", ng-model="textFilter")
-        .error {{ message }}
+        .form-inline
+          label(for="filter") Filter results
+          input#filter.form-control.input-sm(type="text", name="filter", ng-model="textFilter")
+        h3.text-warning.error {{ message }}
         .row.list-group
           .col-xs-12.list-group-item(ng-repeat="location in data.locations | filter: textFilter")
             h4

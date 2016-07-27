@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
 
-require('./app_api/models/db.js')
+require('./app_api/models/db.js');
 
 var routes = require('./app_server/routes/index');
 var routesApi = require('./app_api/routes/index');

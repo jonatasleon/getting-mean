@@ -1,11 +1,3 @@
-var apiOptions = {
-    server: "http://localhost:3000"
-};
-
-if (process.env.NODE_ENV === 'production') {
-    apiOptions.server = "https://loc8r-infinite.herokuapp.com/";
-}
-
 function _formatDistance(distance) {
     var numDistance, unit;
     if (distance > 1) {

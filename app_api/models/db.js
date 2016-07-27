@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var debug = require('debug')('getting-mean:db');
+var config = require('../../config')();
 
-var dbURI = (process.env.NODE_ENV === 'production') ?
-    process.env.MONGOLAB_URI :
-    'mongodb://localhost/Loc8r';
+var dbURI = config.MONGOLAB_URI;
 
 mongoose.connect(dbURI);
 

@@ -1,14 +1,19 @@
+"use strict";
+
 var config = {
     production: {
-        MONGOLAB_URI: 'mongodb://localhost/Loc8r',
+        MONGOLAB_URI: process.env.MONGOLAB_URI,
         SERVER: 'https://loc8r-infinite.herokuapp.com/'
     },
     dev: {
         MONGOLAB_URI: 'mongodb://localhost/Loc8r',
-        SERVER: 'http://localhost:3000'
+        SERVER: 'http://localhost:3000/'
     }
 };
 
+
 module.exports = function (env) {
-    return config[(env || process.argv[2] || 'dev')];
-}
+	var obj = config[env || process.env.NODE_ENV] || config.dev;
+	console.log(obj);
+    return obj;
+};

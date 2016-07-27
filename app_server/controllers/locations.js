@@ -1,5 +1,5 @@
 var request = require('request');
-var apiOptions = require('./utils').apiOptions;
+var config = require('../../config')();
 var _formatDistance = require('./utils')._formatDistance;
 var _showError = require('./utils')._showError;
 
@@ -42,7 +42,7 @@ var getLocationInfo = function(req, res, callback) {
     var requestOptions, path;
     path = "/api/locations/" + req.params.locationid;
     requestOptions = {
-        url: apiOptions.server + path,
+        url: config.SERVER + path,
         method: "GET",
         json: {}
     };
@@ -92,7 +92,7 @@ module.exports.doAddReview = function(req, res) {
         reviewText: req.body.review
     };
     requestOptions = {
-        url: apiOptions.server + path,
+        url: config.SERVER + path,
         method: "POST",
         json: postData
     };

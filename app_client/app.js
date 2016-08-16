@@ -1,4 +1,4 @@
-angular.module('loc8rApp', []);
+angular.module('loc8r', []);
 
 var locationListController = ['$scope', 'loc8rData', 'geolocation',
     function($scope, loc8rData, geolocation) {
@@ -92,7 +92,7 @@ var geolocation = function() {
   };
 };
 
-angular.module('loc8rApp')
+angular.module('loc8r')
     .controller('locationListController', locationListController)
     .filter('formatDistance', formatDistance)
     .directive('ratingStars', ratingStars)
